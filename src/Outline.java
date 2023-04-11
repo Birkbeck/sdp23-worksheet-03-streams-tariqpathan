@@ -1,11 +1,8 @@
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
-import java.util.Random;
-import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
-import java.util.stream.Stream;
 
 
 public class Outline {
@@ -91,6 +88,7 @@ public class Outline {
     System.out.println("Part one (with e):");
     words.stream().filter(s -> s.length() < 4).filter(s -> s.contains("e"))
             .map(String::toUpperCase).findFirst().ifPresent(System.out::println);
+    // instead of findFirst use limit(1)
     System.out.println("Part one (with q):");
     words.stream().filter(s -> s.length() < 4).filter(s -> s.contains("q"))
             .map(String::toUpperCase).findFirst().ifPresent(System.out::println);
@@ -167,6 +165,8 @@ public class Outline {
 
   public static void question11() {
     List<Dish> dishes = Dish.getMenu();
+    // use mapToInt instead of map
+    // for the reduce Integer::sum method reference
     int total = dishes.stream().map(d -> 1).reduce(0, (i, j) -> i + j);
     System.out.println(total);
     System.out.println(dishes.stream().count());
@@ -178,16 +178,48 @@ public class Outline {
   }
 
   public static void question12() {
-    Integer [] intArr = getIntegerArray();
-    Integer[] squareArray = Arrays.stream(intArr)
+    Integer [] integerArray = getIntegerArray();
+    Integer[] squareArray = Arrays.stream(integerArray)
             .map(n -> n * n).toArray(Integer[]::new);
     System.out.println(Arrays.toString(squareArray));
+
+    int[] intArr = {1, 7, 3, 4, 8, 2};
+    List<Integer> squares = IntStream.of(intArr)
+            .mapToObj(n -> n * n)
+            .collect(Collectors.toList());
+    System.out.println(squares);
   }
 
-  public static
+  public static void question13() {
+    Integer[] arr1 = { 1, 2, 3 };
+    Integer[] arr2 = {3, 4};
+    Integer[][] result = Arrays.stream(arr1)
+            .flatMap(i -> Arrays.stream(arr2).map(n -> new Integer[] {i, n}))
+            .toArray(Integer[][]::new);
+    System.out.println(Arrays.deepToString(result));
+  }
+
+  public static void question14() {
+    int[] arr1 = { 1, 2, 3 };
+    int[] arr2 = {3, 4};
+
+    List<List<Integer>> result = Arrays.stream(arr1)
+            .boxed()
+            .flatMap(i -> Arrays.stream(arr2)
+                    .filter(j -> (i + j) % 3 == 0)
+                    .mapToObj(j -> List.of(i, j)))
+            .collect(Collectors.toList());
+    System.out.println(result);
+  }
+
+  public static void question15() {
+    List<Integer> listNum = List.of(1, 3, 4, 5, 6);
+
+
+  }
 
   public static void main(String... args) { // varargs alternative to String[]
-    question12();
+    question14();
     //question2();
 
   }

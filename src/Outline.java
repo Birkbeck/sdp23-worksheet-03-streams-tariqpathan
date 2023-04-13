@@ -1,6 +1,4 @@
-import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
@@ -213,14 +211,83 @@ public class Outline {
   }
 
   public static void question15() {
-    List<Integer> listNum = List.of(1, 3, 4, 5, 6);
-
+    List<Integer> listNum = List.of(1, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12);
+    int res1 = listNum.stream().reduce(0, (a, b) -> a + b);
+    System.out.println("first result: " + res1);
+    int res2 = listNum.stream().reduce(Integer::sum).orElse(0);
+    System.out.println(res2);
+    int res3 = listNum.stream().mapToInt(Integer::intValue).sum();
+    System.out.println(res3);
+    int res4 = listNum.stream().collect(Collectors.summingInt(Integer::intValue));
+    System.out.println(res4);
 
   }
 
-  public static void main(String... args) { // varargs alternative to String[]
-    question14();
-    //question2();
+  public static List<Double> randomDoubles(int size) {
+    Random random = new Random();
+    return IntStream.range(0, size)
+            .mapToObj(i -> random.nextDouble())
+            .collect(Collectors.toList());
+  }
 
+  public static void question16() {
+    System.out.println((randomDoubles(5)));
+  }
+
+  public static List<Integer> orderedNumberLists(int start, int size, int step) {
+    return IntStream.iterate(start, i -> i + step)
+            .limit(size)
+            .boxed()
+            .collect(Collectors.toList());
+  }
+
+  public static void question17() {
+    System.out.println(orderedNumberLists(50, 5, 5));
+  }
+
+  public static void question18() {
+    List<Integer> listNum = List.of(1, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12);
+    int res1 = listNum.parallelStream().reduce(0, (a, b) -> a + b);
+    System.out.println("first result: " + res1);
+    int res2 = listNum.parallelStream().reduce(Integer::sum).orElse(0);
+    System.out.println(res2);
+    int res3 = listNum.parallelStream().mapToInt(Integer::intValue).sum();
+    System.out.println(res3);
+    int res4 = listNum.parallelStream().collect(Collectors.summingInt(Integer::intValue));
+    System.out.println(res4);
+  }
+
+  public static void question19() {
+    List<Double> doubles = List.of(4.04, 3.03, 2.02, 1.01, 5.05);
+    Double seq = doubles.stream().reduce(1.0, (a, b) -> a * b);
+    Double parallel = doubles.parallelStream().reduce(1.0, (a, b) -> a * b);
+    System.out.println("seq: " + seq + " parallel: " + parallel);
+  }
+
+  public static void main(String... args) { // varargs alternative to String[]
+    question19();
+    //question15();
+    int n = 1_00;
+    double[] numbers = new double[n];
+    Random random = new Random();
+
+    for (int i = 0; i < n; i++) {
+      numbers[i] = random.nextDouble();
+    }
+
+    // Calculate the product using a serial stream
+    double serialProduct = Arrays.stream(numbers).reduce(1.0, (a, b) -> a * b);
+
+    // Calculate the product using a parallel stream
+    double parallelProduct = Arrays.stream(numbers).parallel().reduce(1.0, (a, b) -> a * b);
+
+    System.out.println("Serial Product: " + serialProduct);
+    System.out.println("Parallel Product: " + parallelProduct);
+
+    if (serialProduct != parallelProduct) {
+      System.out.println("The serial and parallel products are different!");
+    } else {
+      System.out.println("The serial and parallel products are the same.");
+    }
   }
 }

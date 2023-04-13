@@ -1,6 +1,7 @@
 import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
+import java.util.stream.Stream;
 
 
 public class Outline {
@@ -225,6 +226,12 @@ public class Outline {
 
   public static List<Double> randomDoubles(int size) {
     Random random = new Random();
+
+    //alternative
+    Stream.generate(new Random()::nextDouble)
+            .limit(size)
+            .collect(Collectors.toList());
+
     return IntStream.range(0, size)
             .mapToObj(i -> random.nextDouble())
             .collect(Collectors.toList());
@@ -239,6 +246,7 @@ public class Outline {
             .limit(size)
             .boxed()
             .collect(Collectors.toList());
+    // could also use Stream.iterate
   }
 
   public static void question17() {
@@ -264,6 +272,7 @@ public class Outline {
     System.out.println("seq: " + seq + " parallel: " + parallel);
   }
 
+  // check Q15 from video
   public static void main(String... args) { // varargs alternative to String[]
     question19();
     //question15();
